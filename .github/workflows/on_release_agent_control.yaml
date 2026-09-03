@@ -7,6 +7,16 @@ on:
         description: 'Release tag to process (e.g., v1.18.10)'
         required: true
         type: string
+      source_repo:
+        description: 'Repo (owner/repo) to download release assets from. Leave default for real releases; set for testing.'
+        required: false
+        type: string
+        default: 'newrelic/nri-flex'
+      metadata_git_ref:
+        description: 'Git ref for the metadata upload step. Leave default for real releases; set for testing.'
+        required: false
+        type: string
+        default: 'master'
   release:
     types:
       - released
@@ -19,6 +29,8 @@ jobs:
     uses: newrelic/coreint-automation/.github/workflows/reusable_agent_control_release.yaml@v3
     with:
       tag: ${{ github.event.release.tag_name || inputs.tag }}
+      source_repo: ${{ inputs.source_repo }}
+      metadata_git_ref: ${{ inputs.metadata_git_ref }}
       agent_type: NRIFlex
       display_name: "Flex"
       monitoring_type: "INFRA"
